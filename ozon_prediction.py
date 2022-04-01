@@ -140,16 +140,16 @@ def main():
     print('Root Mean Squared Error: {}\n'.format(np.sqrt(gboost_mse)))
     print('Overall model accuracy: {}'.format(gboost_accuracy))
 
-    params = {'max_depth':[3,4,5,6,7],
+    params = {'max_depth':[3,4,5,6,7,8,9],
               'max_features':['auto','sqrt','log2'],
               'min_samples_split':[2,3,4,5,6,7,8,9,10],
               'min_samples_leaf':[2,3,4,5,6,7,8,9,10]}
-    params['learning_rate'] = np.linspace(0.1,1,10)
+    params['learning_rate'] = np.linspace(0.1, 1, 10)
 
     gradient_boosting = GradientBoostingRegressor()
 
     gboost_search = RandomizedSearchCV(gradient_boosting, params, n_jobs=-1,
-                                       cv=5, verbose=2)
+                                       cv=5, verbose=1)
     gboost_search.fit(X_train, y_train)
 
 
