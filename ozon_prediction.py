@@ -22,10 +22,26 @@ def main():
     data.wd.fillna(value='NE', inplace=True)
     display(data.isnull().any())
 
-    plt.figure(figsize=(12,5))
-    sns.distplot(data['O3'], bins=50)
-    plt.title('Ozon dencity', fontsize=16)
+# TODO: dicede what plot is needed
+#    plt.figure(figsize=(12,5))
+#    sns.distplot(data['O3'], bins=50)
+#    plt.title('Ozon dencity', fontsize=16)
+#    plt.show()
+
+    print("Lets see corellation between the features of the data")
+    input("Press Enter to continue...")
+    plt.figure(figsize=(13,9))
+    correlation_data = data[['PM2.5', 'PM10', 'SO2', 'NO2',
+                             'CO', 'O3', 'TEMP', 'PRES',
+                             'DEWP', 'RAIN', 'WSPM']]
+    sns.heatmap(correlation_data.corr(),cmap=plt.cm.Reds,annot=True)
+    plt.title('Heatmap displaying the correlation matrix of the variables',fontsize=16)
     plt.show()
+
+    print("\nWe see that only two pairs of features correlate well.\n\
+          PM 10, PM2.5 and TEMP, DEWP with coefficients 0.87, 0.82,\n\
+          respectively. Not much to care about. Just ignore it.")
+    input("Press Enter to continue...")
 
 if __name__ == '__main__':
     main()
