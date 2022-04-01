@@ -7,6 +7,10 @@ from IPython.display import display # TODO: is it needed?
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import preprocessing
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 
 def main():
     #TODO: fit all to 79 cols
@@ -66,6 +70,52 @@ def main():
     X_train = np.concatenate((X_scaled[0:d1, :], X_scaled[d2:, :]), axis=0)
     y_train = np.concatenate((y[0:d1], y[d2:]), axis=0)
 
+    lin_model = LinearRegression()
+    lin_model.fit(X_train,y_train)   # fit the model
+
+    print('Score on train data: {}\n'.format(lin_model.score(X_train,y_train)))
+    print('Score on test data: {}'.format(lin_model.score(X_test,y_test)))
+
+    prediction = lin_model.predict(X_test)
+    mse = mean_squared_error(y_test, prediction)
+    accuracy = r2_score(y_test, prediction)
+
+    print('Mean Squared Error: {}\n'.format(mse))
+    print('Overall model accuracy: {}'.format(accuracy))
+    print("Accuracy is about 0.6, very poor, let's try another model")
+    #input("Press Enter to continue...")
+
+    decision_tree = DecisionTreeRegressor()
+    decision_tree.fit(X_train, y_train)
+    print('Score on train data: {}\n'.format(decision_tree.score(X_train,
+                                                                     y_train)))
+    print('Score on test data: {}\n'.format(decision_tree.score(X_test,
+                                                                      y_test)))
+
+    tree_pred = decision_tree.predict(X_test)
+    tree_mse = mean_squared_error(y_test, tree_pred)
+    tree_accuracy = r2_score(y_test, tree_pred)
+
+    print('Root Mean Squared Error: {}\n'.format(np.sqrt(tree_mse)))
+    print('Overall model accuracy: {}'.format(tree_accuracy))
+
+    forest = RandomForestRegressor(n_estimators=100,
+                                   max_depth=7,
+                                   max_features='auto',
+                                   min_samples_split=7,
+                                   min_samples_leaf=3)
+
+    forest.fit(X_train, y_train)
+
+    print('Score on train data: {}\n'.format(forest.score(X_train, y_train)))
+    print('Score on test data: {}\n'.format(forest.score(X_test, y_test)))
+
+    forest_pred = forest.predict(X_test)
+    forest_mse = mean_squared_error(y_test, forest_pred)
+    forest_accuracy = r2_score(y_test, forest_pred)
+
+    print('Root Mean Squared Error: {}\n'.format(np.sqrt(forest_mse)))
+    print('Overall model accuracy: {}'.format(forest_accuracy))
 
 if __name__ == '__main__':
     main()
