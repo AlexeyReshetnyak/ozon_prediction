@@ -13,6 +13,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.neural_network import MLPRegressor
 
 def main():
     #TODO: fit all to 79 cols
@@ -164,6 +165,16 @@ def main():
 
     print('Root Mean Squared Error: {}\n'.format(np.sqrt(gboost_search_mse)))
     print('Overall model accuracy: {}'.format(gboost_search_accuracy))
+
+    ann = MLPRegressor(hidden_layer_sizes=(500, 100), max_iter=1200)
+    ann.fit(X_train, y_train)
+    ann_pred = ann.predict(X_test)
+    ann_score = ann.score(X_test, y_test)
+    ann_mse = mean_squared_error(y_test, ann_pred)
+    ann_accuracy = r2_score(y_test, ann_pred)
+
+    print('Root Mean Squared Error: {}\n'.format(np.sqrt(ann_mse)))
+    print('Overall model accuracy: {}'.format(ann_accuracy))
 
 if __name__ == '__main__':
     main()
