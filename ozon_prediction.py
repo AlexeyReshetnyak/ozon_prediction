@@ -11,7 +11,10 @@ def main():
     file = './data/PRSA_Data_20130301-20170228/PRSA_Data_Aotizhongxin_20130301-20170228.csv'
     data = pd.read_csv(file)
 
-    cols_to_drop = ['No','station']
+    print("\nDrop some non useful columns.")
+    input("Press Enter to continue...")
+
+    cols_to_drop = ['No', 'year', 'month', 'day', 'hour', 'station']
     data = data.drop(cols_to_drop, axis=1)
     data.info()
 
@@ -42,6 +45,12 @@ def main():
           PM 10, PM2.5 and TEMP, DEWP with coefficients 0.87, 0.82,\n\
           respectively. Not much to care about. Just ignore it.")
     input("Press Enter to continue...")
+
+
+    print("\nNow we will split data to predictor an outcome featires")
+    input("Press Enter to continue...")
+    X = data.drop('O3', axis=1)
+    y = data['O3']
 
 if __name__ == '__main__':
     main()
