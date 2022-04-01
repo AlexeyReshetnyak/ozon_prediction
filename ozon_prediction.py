@@ -11,6 +11,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.model_selection import RandomizedSearchCV
 
 def main():
     #TODO: fit all to 79 cols
@@ -116,6 +118,52 @@ def main():
 
     print('Root Mean Squared Error: {}\n'.format(np.sqrt(forest_mse)))
     print('Overall model accuracy: {}'.format(forest_accuracy))
+
+    grad_boost = GradientBoostingRegressor(n_estimators=100,
+                                           max_depth=7,
+                                           max_features='auto',
+                                           min_samples_split=7,
+                                           min_samples_leaf=3,
+                                           learning_rate=0.1)
+
+    grad_boost.fit(X_train, y_train)
+
+    print('Score on train data: {}\n'.format(grad_boost.score(X_train,
+                                                                     y_train)))
+    print('Score on test data: {}\n'.format(grad_boost.score(X_test,
+                                                                      y_test)))
+
+    gboost_pred = grad_boost.predict(X_test)
+    gboost_mse = mean_squared_error(y_test, gboost_pred)
+    gboost_accuracy = r2_score(y_test, gboost_pred)
+
+    print('Root Mean Squared Error: {}\n'.format(np.sqrt(gboost_mse)))
+    print('Overall model accuracy: {}'.format(gboost_accuracy))
+
+    params = {'max_depth':[3,4,5,6,7],
+              'max_features':['auto','sqrt','log2'],
+              'min_samples_split':[2,3,4,5,6,7,8,9,10],
+              'min_samples_leaf':[2,3,4,5,6,7,8,9,10]}
+    params['learning_rate'] = np.linspace(0.1,1,10)
+
+    gradient_boosting = GradientBoostingRegressor()
+
+    gboost_search = RandomizedSearchCV(gradient_boosting, params, n_jobs=-1,
+                                       cv=5, verbose=2)
+    gboost_search.fit(X_train, y_train)
+
+
+    print('Score on train data: {}\n'.format(gboost_search.score(X_train,
+                                                                     y_train)))
+    print('Score on test data: {}\n'.format(gboost_search.score(X_test,
+                                                                      y_test)))
+
+    gboost_search_pred = gboost_search.predict(X_test)
+    gboost_search_mse = mean_squared_error(y_test, gboost_search_pred)
+    gboost_search_accuracy = r2_score(y_test, gboost_search_pred)
+
+    print('Root Mean Squared Error: {}\n'.format(np.sqrt(gboost_search_mse)))
+    print('Overall model accuracy: {}'.format(gboost_search_accuracy))
 
 if __name__ == '__main__':
     main()
