@@ -27,6 +27,7 @@ def main():
 
     file = './data/PRSA_Data_20130301-20170228/PRSA_Data_Aotizhongxin_20130301-20170228.csv'
     #TODO: fit all to 79 cols
+    #TODO: download, and unzip data from web
     data = pd.read_csv(file)
 
     # Drop some non useful columns.
