@@ -16,13 +16,20 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.neural_network import MLPRegressor
 
 def main():
-    #TODO: fit all to 79 cols
+
+    """
+    About the data. There are several files corresponding to different weather
+    stations here. How to deal with them is not yet entirely clear. Maybe they
+    need to be combined, maybe build models for each station separately.
+    While we take some one station and work with it. For example file
+    PRSA_Data_Aotizhongxin_20130301-20170228.csv.
+    """
+
     file = './data/PRSA_Data_20130301-20170228/PRSA_Data_Aotizhongxin_20130301-20170228.csv'
+    #TODO: fit all to 79 cols
     data = pd.read_csv(file)
 
-    print("\nDrop some non useful columns.")
-    #input("Press Enter to continue...")
-
+    # Drop some non useful columns.
     cols_to_drop = ['No', 'year', 'month', 'day', 'hour', 'wd', 'station']
     data = data.drop(cols_to_drop, axis=1)
     data.info()
@@ -33,14 +40,14 @@ def main():
     data.fillna(value=data.mean(), inplace=True)
     display(data.isnull().any())
 
-# TODO: dicede what plot is needed
-#    plt.figure(figsize=(12,5))
-#    sns.distplot(data['O3'], bins=50)
-#    plt.title('Ozon dencity', fontsize=16)
-#    plt.show()
+    # Let's do a little visualization
+    plt.figure(figsize=(12,5))
+    sns.distplot(data['O3'], bins=50)
+    plt.title('Ozon dencity', fontsize=16)
+    plt.show()
+    #It gives nothing special, data as data.
 
-    print("Lets see corellation between the features of the data")
-    #input("Press Enter to continue...")
+    # Lets see corellation between the features of the data
     plt.figure(figsize=(13,9))
     correlation_data = data[['PM2.5', 'PM10', 'SO2', 'NO2',
                              'CO', 'O3', 'TEMP', 'PRES',
