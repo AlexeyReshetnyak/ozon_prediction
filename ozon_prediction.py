@@ -42,18 +42,18 @@ def main():
     display(data.isnull().any())
 
     # Let's do a little visualization
-    plt.figure(figsize=(12,5))
+    plt.figure(figsize=(12, 5))
     sns.histplot(data['O3'], bins=100)
     plt.title('Ozon dencity', fontsize=16)
     plt.show()
     #It gives nothing special, data as data.
 
     # Lets see corellation between the features of the data
-    plt.figure(figsize=(13,9))
+    plt.figure(figsize=(13, 9))
     correlation_data = data[['PM2.5', 'PM10', 'SO2', 'NO2',
                              'CO', 'O3', 'TEMP', 'PRES',
                              'DEWP', 'RAIN', 'WSPM']]
-    sns.heatmap(correlation_data.corr(),cmap=plt.cm.Reds,annot=True)
+    sns.heatmap(correlation_data.corr(), cmap=plt.cm.Reds, annot=True)
     plt.title('Heatmap displaying the correlation matrix of the variables',
                fontsize=16)
     plt.show()
@@ -67,12 +67,14 @@ def main():
     # Now we will split data to predictor, and outcome featires
     X = data.drop('O3', axis=1)
     y = data['O3'].to_numpy()
+
+    # Preprocessin
     X_scaled = preprocessing.scale(X)
 
     """
     Split to train and test. It's demanded by the task test data
     is between 01.06.2016 to 30.11.2016, so split it
-    manually see nedeed period it's between 28513 and 32904 rows.
+    manually see nedeed period. It's between 28513 and 32904 rows.
     """
     d1 = 28513; d2 = 32904
     X_test = X_scaled[d1:d2, :]
