@@ -63,7 +63,7 @@ def main():
     respectively. Not much to care about. Just ignore it.
     """
 
-    # Now we will split data to predictor an outcome featires
+    # Now we will split data to predictor, and outcome featires
     X = data.drop('O3', axis=1)
     y = data['O3'].to_numpy()
     X_scaled = preprocessing.scale(X)
@@ -88,8 +88,8 @@ def main():
     mse = mean_squared_error(y_test, prediction)
     accuracy = r2_score(y_test, prediction)
 
-    print('Lenear regression Mean Squared Error (MSE): {}\n'.format(mse))
-    print('Overall model accuracy: {}'.format(accuracy))
+    print('Lenear regression Mean Squared Error (MSE): {}'.format(mse))
+    print('Lenear regression model accuracy: {}\n'.format(accuracy))
     #Accuracy is about 0.6, very poor, let's try another model
 
     decision_tree = DecisionTreeRegressor()
@@ -99,8 +99,8 @@ def main():
     tree_mse = mean_squared_error(y_test, tree_pred)
     tree_accuracy = r2_score(y_test, tree_pred)
 
-    print('Decision tree Root Mean Squared Error: {}\n'.format(np.sqrt(tree_mse)))
-    print('Decision tree model accuracy: {}'.format(tree_accuracy))
+    print('Decision tree Root Mean Squared Error: {}'.format(np.sqrt(tree_mse)))
+    print('Decision tree model accuracy: {}\n'.format(tree_accuracy))
     #Accuracy is about the same as lin. regression, let's try another model
 
     forest = RandomForestRegressor(n_estimators=100,
@@ -115,8 +115,9 @@ def main():
     forest_mse = mean_squared_error(y_test, forest_pred)
     forest_accuracy = r2_score(y_test, forest_pred)
 
-    print('Random forest Root Mean Squared Error: {}\n'.format(np.sqrt(forest_mse)))
-    print('Random forest model accuracy: {}'.format(forest_accuracy))
+    print('Random forest Root Mean Squared Error: {}'.format(np.sqrt(forest_mse)))
+    print('Random forest model accuracy: {}\n'.format(forest_accuracy))
+    # Accuracy is about 0.74
 
     grad_boost = GradientBoostingRegressor(n_estimators=100,
                                            max_depth=7,
@@ -131,8 +132,9 @@ def main():
     gboost_mse = mean_squared_error(y_test, gboost_pred)
     gboost_accuracy = r2_score(y_test, gboost_pred)
 
-    print('Root Mean Squared Error: {}\n'.format(np.sqrt(gboost_mse)))
-    print('Overall model accuracy: {}'.format(gboost_accuracy))
+    print('Gradient boosting Root Mean Squared Error: {}'.format(np.sqrt(gboost_mse)))
+    print('Gradient boosting Overall model accuracy:{}\n'.format(gboost_accuracy))
+    # Accuracy is about 0.76
 
     params = {'max_depth':[3,4,5,6,7,8,9],
               'max_features':['auto','sqrt','log2'],
@@ -146,18 +148,13 @@ def main():
                                        cv=5, verbose=1)
     gboost_search.fit(X_train, y_train)
 
-
-    print('Score on train data: {}\n'.format(gboost_search.score(X_train,
-                                                                     y_train)))
-    print('Score on test data: {}\n'.format(gboost_search.score(X_test,
-                                                                      y_test)))
-
     gboost_search_pred = gboost_search.predict(X_test)
     gboost_search_mse = mean_squared_error(y_test, gboost_search_pred)
     gboost_search_accuracy = r2_score(y_test, gboost_search_pred)
 
-    print('Root Mean Squared Error: {}\n'.format(np.sqrt(gboost_search_mse)))
-    print('Overall model accuracy: {}'.format(gboost_search_accuracy))
+    print('Gradient Boosting with search Root Mean Squared Error: {}'.format(np.sqrt(gboost_search_mse)))
+    print('Gradient Boosting with search Overall model accuracy: {}\n'.format(gboost_search_accuracy))
+    # Accuracy is about 0.73
 
     ann = MLPRegressor(hidden_layer_sizes=(500, 100), max_iter=1200)
     ann.fit(X_train, y_train)
@@ -166,8 +163,9 @@ def main():
     ann_mse = mean_squared_error(y_test, ann_pred)
     ann_accuracy = r2_score(y_test, ann_pred)
 
-    print('Root Mean Squared Error: {}\n'.format(np.sqrt(ann_mse)))
-    print('Overall model accuracy: {}'.format(ann_accuracy))
+    print('ANN Root Mean Squared Error: {}'.format(np.sqrt(ann_mse)))
+    print('ANN Overall model accuracy: {}\n'.format(ann_accuracy))
+    # Accuracy is about 0.74
 
 if __name__ == '__main__':
     main()
