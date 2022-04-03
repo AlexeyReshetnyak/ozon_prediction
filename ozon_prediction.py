@@ -85,13 +85,13 @@ def main():
     
     # Let's try linear regression
     lin_model = LinearRegression()
-    lin_model.fit(X_train,y_train)   # fit the model
+    lin_model.fit(X_train,y_train)
 
     prediction = lin_model.predict(X_test)
     mse = mean_squared_error(y_test, prediction)
     accuracy = r2_score(y_test, prediction)
 
-    print('Lenear regression Mean Squared Error (MSE): {}'.format(mse))
+    print('Lenear regression Mean Squared Error (MSE): {}'.format(np.sqrt(mse)))
     print('Lenear regression model accuracy: {}\n'.format(accuracy))
     #Accuracy is about 0.6, very poor, let's try another model
 
@@ -146,7 +146,6 @@ def main():
     params['learning_rate'] = np.linspace(0.1, 1, 10)
 
     gradient_boosting = GradientBoostingRegressor()
-
     gboost_search = RandomizedSearchCV(gradient_boosting, params, n_jobs=-1,
                                        cv=5, verbose=1)
     gboost_search.fit(X_train, y_train)
@@ -168,7 +167,12 @@ def main():
 
     print('ANN Root Mean Squared Error: {}'.format(np.sqrt(ann_mse)))
     print('ANN Overall model accuracy: {}\n'.format(ann_accuracy))
-    # Accuracy is about 0.74
+    # Accuracy is about 0.75
+    """
+    So several methods have been tried, we can say by brute force. The accuracy
+    is about 0.76. The average result, but for the first approximation it will
+    do fine.
+    """
 
 if __name__ == '__main__':
     main()
